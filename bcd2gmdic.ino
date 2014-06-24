@@ -16,16 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <SPI.h>
 #include <MCP2515.h>
 #include <SoftwareSerial.h>
+#include "bcd2gmdic.h"
 
 static SoftwareSerial sSerial(8, 9);
-
-typedef struct {
-    String tgid;
-    String group;
-    String name;
-} TalkgroupInfo;
 
 static TalkgroupInfo gCurrentTalkgroup;
 
