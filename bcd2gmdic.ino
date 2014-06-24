@@ -47,7 +47,7 @@ void setDic(String message)
     byte data[16];
     byte data1[8];
     byte data2[8];
-    memset(data, 20, sizeof(data));
+    memset(data, 0x20, sizeof(data));
     message.getBytes(data, sizeof(message));
 
     memcpy(data1, data, 8);
