@@ -20,9 +20,9 @@
  #define BCD2GMDIC_H
 
  typedef struct {
-     String tgid;
-     String group;
-     String name;
+     char tgid[6];
+     char group[17];
+     char name[17];
  } TalkgroupInfo;
 
  #endif

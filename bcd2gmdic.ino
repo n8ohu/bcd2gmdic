@@ -42,13 +42,18 @@ void printTgid(TalkgroupInfo talkgroup)
     Serial.println(talkgroup.name);
 }
 
-void setDic(String message)
+void setDic(char* message)
 {
-    byte data[16];
-    byte data1[8];
-    byte data2[8];
-    memset(data, 0x20, sizeof(data));
-    message.getBytes(data, sizeof(message));
+    byte data[17];
+    byte data1[9];
+    byte data2[9];
+
+    data[16] = 0;
+    data1[8] = 0;
+    data2[8] = 0;
+
+    memset(data, 0x20, 16);
+    memcpy(data, message, strlen(message));
 
     memcpy(data1, data, 8);
     memcpy(data2, data + 8, 8);
@@ -79,9 +84,13 @@ void requestTgid()
 
     delay(25);
 
-    String tgid = "";
-    String group = "";
-    String name = "";
+    char tgid[6];
+    char group[17];
+    char name[17];
+
+    memset(tgid, 0, 9);
+    memset(group, 0, 17);
+    memset(name, 0, 17);
 
     int8_t field = 0;
     char inChar;
@@ -106,23 +115,23 @@ void requestTgid()
 
         if (field == 2)  // TGID
         {
-            tgid += inChar;
+            memcpy(tgid + strlen(tgid), &inChar, 1);
         }
         else if (field == 5)
         {
-            group += inChar;
+            memcpy(group + strlen(group), &inChar, 1);
         }
         else if (field == 6)
         {
-            name += inChar;
+            memcpy(name + strlen(name), &inChar, 1);
         }
     }
 
-    if (tgid != "")
+    if (strlen(tgid) > 0)
     {
-        gCurrentTalkgroup.tgid = tgid;
-        gCurrentTalkgroup.group = group;
-        gCurrentTalkgroup.name = name;
+        memcpy(gCurrentTalkgroup.tgid, tgid, sizeof(tgid));
+        memcpy(gCurrentTalkgroup.group, group, sizeof(group));;
+        memcpy(gCurrentTalkgroup.name, name, sizeof(name));
         printTgid(gCurrentTalkgroup);
         setDic(gCurrentTalkgroup.name);
     }
@@ -146,6 +155,6 @@ void loop()
     requestTgid();
 
     // for testing can
-    //setDic("29FBPDIS");
-    //delay(1000);
+    //setDic("ABCDEFGHIJ");
+    //delay(3000);
 }
